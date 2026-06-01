@@ -7,7 +7,7 @@ import { DashboardScreen } from '../screens/dashboard/DashboardScreen'
 import { AnalisisNavigator } from './AnalisisNavigator'
 import { AnalisisNuevoScreen } from '../screens/analisis/nuevo/AnalisisNuevoScreen'
 import { ConfiguracionScreen } from '../screens/configuracion/ConfiguracionScreen'
-import { EmpresaSelectScreen } from '../screens/auth/EmpresaSelectScreen'
+import { EmpresaOnboardingNavigator } from './EmpresaOnboardingNavigator'
 import { useEmpresaStore } from '../stores/empresaStore'
 import { colors } from '../constants/colors'
 
@@ -90,7 +90,7 @@ export function AppNavigator() {
   const { empresaActiva } = useEmpresaStore()
 
   if (!empresaActiva) {
-    return <EmpresaSelectScreen />
+    return <EmpresaOnboardingNavigator />
   }
 
   return (

@@ -3,6 +3,7 @@ import {
   View, Text, FlatList, StyleSheet,
   SafeAreaView, TouchableOpacity,
 } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { colors } from '../../constants/colors'
 import { Card } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
@@ -11,6 +12,7 @@ import { useAuthStore } from '../../stores/authStore'
 import { Empresa } from '../../types'
 
 export function EmpresaSelectScreen() {
+  const navigation = useNavigation<any>()
   const { empresasUsuario, setEmpresaActiva } = useEmpresaStore()
   const { user, logout } = useAuthStore()
 
@@ -61,8 +63,14 @@ export function EmpresaSelectScreen() {
             <Text style={styles.emptyTitle}>Sin empresas asociadas</Text>
             <Text style={styles.emptyText}>
               Tu cuenta no tiene empresas asignadas.{'\n'}
-              Contacta al administrador de tu organización.
+              Puedes crear una empresa para comenzar.
             </Text>
+            <Button
+              label="Crear empresa"
+              onPress={() => navigation.navigate('CrearEmpresa')}
+              variant="primary"
+              size="sm"
+            />
           </View>
         }
       />
