@@ -1,10 +1,7 @@
 import React from 'react'
 import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  SafeAreaView,
+  View, Text, FlatList, StyleSheet,
+  SafeAreaView, TouchableOpacity,
 } from 'react-native'
 import { colors } from '../../constants/colors'
 import { Card } from '../../components/ui/Card'
@@ -15,16 +12,22 @@ import { Empresa } from '../../types'
 
 export function EmpresaSelectScreen() {
   const { empresasUsuario, setEmpresaActiva } = useEmpresaStore()
-  const { user } = useAuthStore()
+  const { user, logout } = useAuthStore()
 
   function seleccionar(empresa: Empresa) {
     setEmpresaActiva(empresa)
+    // AppNavigator detecta empresaActiva !== null y muestra los tabs
   }
 
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <Text style={styles.title}>Seleccionar empresa</Text>
+        <View style={styles.headerRow}>
+          <Text style={styles.title}>Seleccionar empresa</Text>
+          <TouchableOpacity onPress={logout} style={styles.logoutBtn}>
+            <Text style={styles.logoutText}>Cerrar sesión</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.subtitle}>
           Hola {user?.email ?? ''}. Elige con qué empresa quieres trabajar.
         </Text>
@@ -55,8 +58,10 @@ export function EmpresaSelectScreen() {
         )}
         ListEmptyComponent={
           <View style={styles.empty}>
+            <Text style={styles.emptyTitle}>Sin empresas asociadas</Text>
             <Text style={styles.emptyText}>
-              No tienes empresas asociadas. Contacta al administrador.
+              Tu cuenta no tiene empresas asignadas.{'\n'}
+              Contacta al administrador de tu organización.
             </Text>
           </View>
         }
@@ -73,14 +78,28 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: colors.primary,
     paddingHorizontal: 20,
-    paddingTop: 24,
+    paddingTop: 20,
     paddingBottom: 28,
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '800',
     color: colors.white,
-    marginBottom: 6,
+  },
+  logoutBtn: {
+    paddingVertical: 4,
+    paddingHorizontal: 2,
+  },
+  logoutText: {
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.75)',
+    fontWeight: '500',
   },
   subtitle: {
     fontSize: 14,
@@ -125,13 +144,21 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   empty: {
-    padding: 32,
+    flex: 1,
+    padding: 40,
     alignItems: 'center',
+    gap: 12,
+  },
+  emptyTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.text,
+    textAlign: 'center',
   },
   emptyText: {
+    fontSize: 14,
     color: colors.textSecondary,
     textAlign: 'center',
-    fontSize: 14,
     lineHeight: 22,
   },
 })

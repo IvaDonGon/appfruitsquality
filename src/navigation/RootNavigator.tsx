@@ -10,19 +10,18 @@ import { AppNavigator } from './AppNavigator'
 import { colors } from '../constants/colors'
 
 export function RootNavigator() {
-  // listo = terminó de verificar sesión + empresas
   const [listo, setListo] = useState(false)
 
   const { session, setSession } = useAuthStore()
-  const { setEmpresaActiva, setEmpresasUsuario } = useEmpresaStore()
+  const { setEmpresaActiva, setEmpresasUsuario, limpiar } = useEmpresaStore()
 
   useEffect(() => {
     let montado = true
 
+    // Carga inicial: obtiene sesión y empresas en secuencia, LUEGO muestra la app
     const inicializar = async () => {
       try {
         const { data: { session: sesionActual } } = await supabase.auth.getSession()
-
         if (!montado) return
 
         setSession(sesionActual)
@@ -31,7 +30,7 @@ export function RootNavigator() {
           await cargarEmpresas(sesionActual.user.id)
         }
       } catch (err) {
-        console.warn('RootNavigator init error:', err)
+        console.warn('[RootNavigator] init error:', err)
       } finally {
         if (montado) setListo(true)
       }
@@ -39,10 +38,9 @@ export function RootNavigator() {
 
     inicializar()
 
-    // Timeout de seguridad: si en 8 segundos no cargó, mostrar la app igual
     const timeout = setTimeout(() => {
       if (montado) {
-        console.warn('RootNavigator: timeout de seguridad activado')
+        console.warn('[RootNavigator] timeout de seguridad activado')
         setListo(true)
       }
     }, 8000)
@@ -51,18 +49,21 @@ export function RootNavigator() {
       async (event, nuevaSesion) => {
         if (!montado) return
 
+        // INITIAL_SESSION lo maneja inicializar() arriba.
+        // El listener solo reacciona a cambios de sesión posteriores al arranque.
+        if (event === 'INITIAL_SESSION') return
+
         setSession(nuevaSesion)
 
         if (event === 'SIGNED_IN' && nuevaSesion?.user?.id) {
           await cargarEmpresas(nuevaSesion.user.id)
+          if (montado) setListo(true)
         }
 
         if (event === 'SIGNED_OUT') {
-          setEmpresasUsuario([])
-          setEmpresaActiva(null)
+          limpiar()
+          if (montado) setListo(true)
         }
-
-        if (montado) setListo(true)
       }
     )
 
@@ -76,13 +77,13 @@ export function RootNavigator() {
   const cargarEmpresas = async (userId: string) => {
     try {
       const empresas = await obtenerEmpresasUsuario(userId)
+      console.log(`[RootNavigator] ${empresas.length} empresa(s) encontrada(s)`)
       setEmpresasUsuario(empresas)
       if (empresas.length === 1) {
         setEmpresaActiva(empresas[0])
       }
     } catch (err) {
-      console.warn('Error cargando empresas:', err)
-      setEmpresasUsuario([])
+      console.warn('[RootNavigator] Error cargando empresas:', err)
     }
   }
 

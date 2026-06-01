@@ -1,11 +1,12 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { DashboardScreen } from '../screens/dashboard/DashboardScreen'
 import { AnalisisNavigator } from './AnalisisNavigator'
 import { AnalisisNuevoScreen } from '../screens/analisis/nuevo/AnalisisNuevoScreen'
 import { ConfiguracionScreen } from '../screens/configuracion/ConfiguracionScreen'
+import { EmpresaSelectScreen } from '../screens/auth/EmpresaSelectScreen'
+import { useEmpresaStore } from '../stores/empresaStore'
 import { colors } from '../constants/colors'
 
 export type AppTabParamList = {
@@ -18,6 +19,12 @@ export type AppTabParamList = {
 const Tab = createBottomTabNavigator<AppTabParamList>()
 
 export function AppNavigator() {
+  const { empresaActiva } = useEmpresaStore()
+
+  if (!empresaActiva) {
+    return <EmpresaSelectScreen />
+  }
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -28,20 +35,20 @@ export function AppNavigator() {
         tabBarLabelStyle: styles.tabLabel,
         tabBarIcon: ({ color, focused }) => {
           if (route.name === 'Inicio') {
-            return <Icon name="home-outline" size={24} color={color} />
+            return <Text style={[styles.tabEmoji, { opacity: focused ? 1 : 0.5 }]}>🏠</Text>
           }
           if (route.name === 'Analisis') {
-            return <Icon name="clipboard-list-outline" size={24} color={color} />
+            return <Text style={[styles.tabEmoji, { opacity: focused ? 1 : 0.5 }]}>📋</Text>
           }
           if (route.name === 'Nuevo') {
             return (
               <View style={styles.nuevoIconContainer}>
-                <Icon name="plus" size={28} color={colors.white} />
+                <Text style={styles.nuevoIconText}>+</Text>
               </View>
             )
           }
           if (route.name === 'Configuracion') {
-            return <Icon name="cog-outline" size={24} color={color} />
+            return <Text style={[styles.tabEmoji, { opacity: focused ? 1 : 0.5 }]}>⚙️</Text>
           }
           return null
         },
@@ -87,6 +94,9 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '500',
   },
+  tabEmoji: {
+    fontSize: 22,
+  },
   nuevoTab: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -104,5 +114,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 8,
     elevation: 6,
+  },
+  nuevoIconText: {
+    fontSize: 30,
+    color: colors.white,
+    fontWeight: '300',
+    lineHeight: 34,
   },
 })
