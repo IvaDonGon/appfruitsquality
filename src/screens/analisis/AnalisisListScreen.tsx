@@ -10,6 +10,7 @@ import {
   RefreshControl,
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { Search, X, ClipboardList } from 'lucide-react-native'
 import { colors } from '../../constants/colors'
 import { LoadingScreen } from '../../components/ui/LoadingScreen'
 import { EmptyState } from '../../components/ui/EmptyState'
@@ -77,7 +78,7 @@ export function AnalisisListScreen() {
     <SafeAreaView style={styles.safe}>
       {/* Search */}
       <View style={styles.searchBar}>
-        <Text style={styles.searchIcon}>🔍</Text>
+        <Search size={16} color={colors.textTertiary} style={{ marginRight: 8 }} />
         <TextInput
           style={styles.searchInput}
           placeholder="Buscar por productor o lote..."
@@ -88,8 +89,8 @@ export function AnalisisListScreen() {
           autoCorrect={false}
         />
         {busqueda ? (
-          <TouchableOpacity onPress={() => setBusqueda('')}>
-            <Text style={styles.clearSearch}>✕</Text>
+          <TouchableOpacity onPress={() => setBusqueda('')} style={{ paddingLeft: 8 }}>
+            <X size={16} color={colors.textTertiary} />
           </TouchableOpacity>
         ) : null}
       </View>
@@ -136,7 +137,7 @@ export function AnalisisListScreen() {
           <EmptyState
             title="Sin resultados"
             subtitle={busqueda ? 'No coincide con la búsqueda.' : 'No hay análisis en esta categoría.'}
-            icon="📋"
+            IconComponent={ClipboardList}
           />
         }
       />
@@ -155,17 +156,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.borderLight,
   },
-  searchIcon: { fontSize: 16, marginRight: 8 },
   searchInput: {
     flex: 1,
     fontSize: 15,
     color: colors.text,
     paddingVertical: 4,
-  },
-  clearSearch: {
-    fontSize: 14,
-    color: colors.textTertiary,
-    paddingLeft: 8,
   },
   tabs: {
     backgroundColor: colors.white,

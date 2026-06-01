@@ -9,6 +9,7 @@ import {
   Modal,
   SafeAreaView,
 } from 'react-native'
+import { X } from 'lucide-react-native'
 import { colors } from '../../../constants/colors'
 import { Button } from '../../../components/ui/Button'
 import { Input } from '../../../components/ui/Input'
@@ -81,8 +82,8 @@ export function Paso4CalibresScreen({ onNext }: Props) {
           <View style={styles.calibreCard}>
             <View style={styles.calibreHeader}>
               <Text style={styles.calibreNombre}>{item.calibre}</Text>
-              <TouchableOpacity onPress={() => eliminarCalibre(index)}>
-                <Text style={styles.removeBtn}>✕</Text>
+              <TouchableOpacity onPress={() => eliminarCalibre(index)} style={{ padding: 4 }}>
+                <X size={16} color={colors.danger} />
               </TouchableOpacity>
             </View>
             <View style={styles.calibreCampos}>
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   calibreNombre: { fontSize: 15, fontWeight: '700', color: colors.text },
-  removeBtn: { fontSize: 16, color: colors.danger, padding: 4 },
+  removeBtn: { padding: 4 },
   calibreCampos: { flexDirection: 'row', gap: 10 },
   campoGroup: { flex: 1, alignItems: 'center' },
   campoLabel: { fontSize: 11, color: colors.textSecondary, marginBottom: 4 },

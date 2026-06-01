@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import { ActivityIndicator, View } from 'react-native'
 import { supabase } from '../services/supabaseClient'
 import { useAuthStore } from '../stores/authStore'
 import { useEmpresaStore } from '../stores/empresaStore'
 import { obtenerEmpresasUsuario } from '../services/empresaService'
 import { AuthNavigator } from './AuthNavigator'
 import { AppNavigator } from './AppNavigator'
+import { LoadingScreen } from '../components/ui/LoadingScreen'
 import { colors } from '../constants/colors'
 
 export function RootNavigator() {
@@ -88,16 +88,7 @@ export function RootNavigator() {
   }
 
   if (!listo) {
-    return (
-      <View style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: colors.background,
-      }}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    )
+    return <LoadingScreen message="Iniciando aplicación..." />
   }
 
   return (

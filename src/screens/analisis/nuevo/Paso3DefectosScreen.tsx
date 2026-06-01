@@ -9,6 +9,7 @@ import {
   Modal,
   SafeAreaView,
 } from 'react-native'
+import { X, Check } from 'lucide-react-native'
 import { colors } from '../../../constants/colors'
 import { Button } from '../../../components/ui/Button'
 import { Input } from '../../../components/ui/Input'
@@ -112,7 +113,7 @@ export function Paso3DefectosScreen({ onNext }: Props) {
                 }}
                 style={styles.removeBtn}
               >
-                <Text style={styles.removeBtnText}>✕</Text>
+                <X size={16} color={colors.danger} />
               </TouchableOpacity>
             </View>
           </View>
@@ -159,7 +160,7 @@ export function Paso3DefectosScreen({ onNext }: Props) {
                     </Text>
                     <Text style={styles.catalogoTipo}>{item.tipo}</Text>
                   </View>
-                  {sel ? <Text style={styles.checkmark}>✓</Text> : null}
+                  {sel ? <Check size={16} color={colors.accent} /> : null}
                 </TouchableOpacity>
               )
             }}
@@ -216,7 +217,6 @@ const styles = StyleSheet.create({
   pctField: { fontSize: 15, color: colors.text, paddingVertical: 6, width: 44, textAlign: 'right' },
   pctSuffix: { fontSize: 13, color: colors.textSecondary },
   removeBtn: { padding: 6 },
-  removeBtnText: { fontSize: 16, color: colors.danger },
   emptyText: {
     textAlign: 'center',
     color: colors.textSecondary,
@@ -261,7 +261,6 @@ const styles = StyleSheet.create({
   catalogoNombre: { fontSize: 14, color: colors.text },
   catalogoNombreSelected: { color: colors.accent, fontWeight: '600' },
   catalogoTipo: { fontSize: 12, color: colors.textSecondary, marginTop: 2 },
-  checkmark: { fontSize: 16, color: colors.accent, fontWeight: '700' },
   sep: { height: 1, backgroundColor: colors.borderLight, marginHorizontal: 20 },
   sheetFooter: { padding: 16 },
 })

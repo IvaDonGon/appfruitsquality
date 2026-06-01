@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   ViewStyle,
 } from 'react-native'
+import { ChevronDown, Check } from 'lucide-react-native'
 import { colors } from '../../constants/colors'
 
 interface Option {
@@ -57,7 +58,7 @@ export function Select({
         <Text style={[styles.triggerText, !selected && styles.placeholder]}>
           {selected ? selected.label : placeholder}
         </Text>
-        <Text style={styles.chevron}>{'›'}</Text>
+        <ChevronDown size={18} color={colors.textSecondary} />
       </TouchableOpacity>
 
       {error ? <Text style={styles.error}>{error}</Text> : null}
@@ -98,7 +99,7 @@ export function Select({
                   {item.label}
                 </Text>
                 {item.value === value ? (
-                  <Text style={styles.checkmark}>✓</Text>
+                  <Check size={16} color={colors.accent} />
                 ) : null}
               </TouchableOpacity>
             )}
@@ -143,12 +144,6 @@ const styles = StyleSheet.create({
   },
   placeholder: {
     color: colors.textTertiary,
-  },
-  chevron: {
-    fontSize: 20,
-    color: colors.textSecondary,
-    transform: [{ rotate: '90deg' }],
-    marginTop: -2,
   },
   error: {
     fontSize: 12,
@@ -198,11 +193,6 @@ const styles = StyleSheet.create({
   optionTextSelected: {
     color: colors.accent,
     fontWeight: '600',
-  },
-  checkmark: {
-    fontSize: 16,
-    color: colors.accent,
-    fontWeight: '700',
   },
   separator: {
     height: 1,

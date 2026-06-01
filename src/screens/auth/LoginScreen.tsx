@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import {
   View, Text, StyleSheet, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ScrollView,
-  ActivityIndicator, SafeAreaView,
+  KeyboardAvoidingView, Platform, ScrollView, SafeAreaView,
 } from 'react-native'
+import { Leaf } from 'lucide-react-native'
 import { supabase } from '../../services/supabaseClient'
 import { colors } from '../../constants/colors'
 import { Input } from '../../components/ui/Input'
@@ -61,7 +61,7 @@ export function LoginScreen() {
         >
           <View style={styles.logoContainer}>
             <View style={styles.logoCircle}>
-              <Text style={styles.logoEmoji}>🍎</Text>
+              <Leaf size={36} color={colors.white} strokeWidth={1.5} />
             </View>
             <Text style={styles.appName}>Fruits Quality</Text>
             <Text style={styles.tagline}>Control de calidad de fruta</Text>
@@ -139,9 +139,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
-  },
-  logoEmoji: {
-    fontSize: 36,
   },
   appName: {
     fontSize: 26,

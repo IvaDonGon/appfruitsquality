@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import {
-  View, Text, StyleSheet, ScrollView,
-  RefreshControl, TouchableOpacity, ActivityIndicator, SafeAreaView,
+  View, Text, StyleSheet, ScrollView, Platform, StatusBar,
+  RefreshControl, TouchableOpacity, ActivityIndicator,
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { Bell } from 'lucide-react-native'
 import { useAuthStore } from '../../stores/authStore'
 import { useEmpresaStore } from '../../stores/empresaStore'
 import { supabase } from '../../services/supabaseClient'
@@ -133,7 +134,7 @@ export function DashboardScreen() {
   ]
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <View style={styles.safe}>
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
@@ -148,9 +149,10 @@ export function DashboardScreen() {
       >
         <View style={styles.header}>
           <View>
-            <Text style={styles.saludo}>{saludo}, {nombre} 👋</Text>
+            <Text style={styles.saludo}>{saludo}, {nombre}</Text>
             <Text style={styles.empresa}>{empresaActiva.nombre}</Text>
           </View>
+          <Bell size={22} color="rgba(255,255,255,0.8)" strokeWidth={1.5} />
         </View>
 
         {error ? (
@@ -222,29 +224,25 @@ export function DashboardScreen() {
           )}
         </View>
 
-        <View style={{ height: 100 }} />
+        <View style={{ height: 24 }} />
       </ScrollView>
-
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => navigation.navigate('Nuevo')}
-        activeOpacity={0.85}
-      >
-        <Text style={styles.fabText}>+</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   )
 }
 
+const headerPaddingTop = Platform.OS === 'ios' ? 56 : (StatusBar.currentHeight ?? 0) + 16
+
 const styles = StyleSheet.create({
-  safe:              { flex: 1, backgroundColor: colors.background },
-  scroll:            { flex: 1 },
+  safe:              { flex: 1, backgroundColor: colors.primary },
+  scroll:            { flex: 1, backgroundColor: colors.background },
   content:           { paddingBottom: 32 },
   centered:          { flex: 1, justifyContent: 'center', alignItems: 'center',
                        backgroundColor: colors.background, gap: 8 },
   loadingText:       { color: colors.textSecondary, fontSize: 14, marginTop: 8 },
   header:            { backgroundColor: colors.primary, paddingHorizontal: 20,
-                       paddingTop: 20, paddingBottom: 28 },
+                       paddingTop: headerPaddingTop, paddingBottom: 28,
+                       flexDirection: 'row', justifyContent: 'space-between',
+                       alignItems: 'flex-end' },
   saludo:            { fontSize: 18, fontWeight: '700', color: colors.white, marginBottom: 4 },
   empresa:           { fontSize: 13, color: 'rgba(255,255,255,0.7)' },
   section:           { paddingHorizontal: 16, paddingTop: 20 },
@@ -278,12 +276,4 @@ const styles = StyleSheet.create({
                        padding: 12, margin: 16,
                        borderWidth: 1, borderColor: '#fecaca' },
   errorText:         { color: colors.danger, fontSize: 13 },
-  fab:               { position: 'absolute', bottom: 90, right: 20,
-                       width: 56, height: 56, borderRadius: 28,
-                       backgroundColor: colors.accent,
-                       justifyContent: 'center', alignItems: 'center',
-                       elevation: 6, shadowColor: '#000',
-                       shadowOffset: { width: 0, height: 3 },
-                       shadowOpacity: 0.2, shadowRadius: 6 },
-  fabText:           { fontSize: 28, color: colors.white, fontWeight: '300', marginTop: -2 },
 })
